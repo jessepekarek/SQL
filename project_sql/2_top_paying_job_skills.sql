@@ -36,7 +36,7 @@ INNER JOIN skills_job_dim sjd ON tpj.job_id = sjd.job_id
 INNER JOIN skills_dim sd ON sd.skill_id = sjd.skill_id
 ORDER BY
     salary_year_avg DESC
-
+  LIMIT 10;
 /*
 SQL - 9/10 jobs (90%) ⭐
 Python - 8/10 jobs (80%) ⭐
