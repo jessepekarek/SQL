@@ -27,21 +27,22 @@ GROUP BY
 HAVING
     COUNT(sjd.job_id) > 10
 ORDER BY
-    avg_salary DESC,
-    demand_count DESC
-LIMIT 25;
+    demand_count DESC,
+    avg_salary DESC
+LIMIT 10;
 
+
+
+--The query below is showing how to complete this with CTEs
 /*
--The query below is showing how to complete this with CTEs
-
 WITH skills_demand AS (
     SELECT 
         sd.skill_id,
         sd.skills,
         COUNT(sjd.job_id) AS demand_count
     FROM job_postings_fact jpf
-    INNER JOIN skills_job_dim sjd ON jpf.job_id = sjd.job_id
-    INNER JOIN skills_dim sd ON sd.skill_id = sjd.skill_id
+        INNER JOIN skills_job_dim sjd ON jpf.job_id = sjd.job_id
+        INNER JOIN skills_dim sd ON sd.skill_id = sjd.skill_id
     WHERE
         jpf.job_title_short = 'Data Analyst' AND
         job_work_from_home = TRUE AND
@@ -51,36 +52,31 @@ WITH skills_demand AS (
 ),
 
 average_salary AS (
-SELECT
-    sd.skill_id,
-    sd.skills,
-    ROUND(AVG(jpf.salary_year_avg),0) AS avg_salary
-    --COUNT(sjd.job_id) AS demand_count
-
-FROM job_postings_fact jpf
-INNER JOIN skills_job_dim sjd ON jpf.job_id = sjd.job_id
-INNER JOIN skills_dim sd ON sd.skill_id = sjd.skill_id
-WHERE
-    job_title_short = 'Data Analyst' AND
-    job_work_from_home = TRUE AND
-    jpf.salary_year_avg IS NOT NULL
-GROUP BY
-    sd.skill_id
+    SELECT
+        sjd.skill_id,
+        AVG(jpf.salary_year_avg) AS avg_salary
+    FROM job_postings_fact jpf
+        INNER JOIN skills_job_dim sjd ON jpf.job_id = sjd.job_id
+    WHERE
+        job_title_short = 'Data Analyst' AND
+        job_work_from_home = TRUE AND
+        jpf.salary_year_avg IS NOT NULL
+    GROUP BY
+        sjd.skill_id
 )
 
 SELECT
-    sd.skill_id,
     sd.skills,
-    demand_count,
-    avg_salary
+    sd.demand_count,
+    ROUND(avgs.avg_salary, 2) AS avg_salary
 FROM skills_demand sd
-INNER JOIN average_salary avgs 
+    INNER JOIN average_salary avgs 
     ON sd.skill_id = avgs.skill_id
-WHERE 
-    demand_count > 10
+--WHERE 
+--    demand_count > 10
 ORDER BY
-    avg_salary DESC,
-    demand_count DESC
+    demand_count DESC,
+    avg_salary DESC
 LIMIT
-    25;
+    10;
 */
