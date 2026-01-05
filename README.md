@@ -59,7 +59,7 @@ FROM
 	job_postings_fact jpf
 LEFT JOIN company_dim cd ON jpf.company_id = cd.company_id
 WHERE
-	job_title = 'Data Analyst'
+	job_title_short = 'Data Analyst'
 	AND salary_year_avg IS NOT NULL
 	AND job_location = 'Anywhere'
 ORDER BY
@@ -72,6 +72,9 @@ Here's the breakdown of the top data analyst jobs in 2023:
 - **Wide Salary range:** Top 10 paying data analyst roles span from $184K - $650K (top role was a Director of Analytics)
 - **Companies:** Diverse employers, showing a broad interest across different industries.  Mix of tech (Meta), finance (SmartAsset), and telecom (AT&T)
 - **Job Titles vary widely:** From "Data Analyst" to "Director of Analytics" - different seniority levels have different pay scales, reflecting varied roles and specializations within data analytics.
+
+![Top 10 Paying Jobs](assets/top_10_paying_jobs.png)
+*Bar chart showing the top 10 highest-paying remote data analyst jobs in 2023; ChatGPT generated this graph from my SQL query results*
 
 **Key insight:** There's significant salary potential in data analytics, even in "analyst" roles.
 
